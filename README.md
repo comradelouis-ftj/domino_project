@@ -2,6 +2,27 @@
 
 A desktop-based dominoes game that combines artifiial intelligence and a classic tabletop game, creating a simple user-friendly game GUI that aims to create a fun and challenging game utilizing search algorithms and machine learning models.
 
+By: 
+1. Felicia Gracia Aliwinoto
+2. Valesca Syakilla Tuhumury
+3. Sherly Laurencia Matius
+4. Juan Davin Setiawan
+5. Louis Filiepe Tio Jansel
+
+---
+
+## 📌 How to Run the GUI
+
+Steps to run the GUI:
+1. (Optional, but preferred) Create a virtual environment by -> python -m venv venv
+2. Install all dependencies (via -> pip install -r requirements.txt). **Note: Make sure ipykernel is also installed, as this library may have to be installed separately**
+3. Run the .ipynb files within the 'modelling_ml' folder to train and save machine learning models.
+4. Verify that models are saved in the 'models' folder.
+5. Run gui_code.py to run and play the GUI.
+
+**NOTE: to reset leaderboard, simply delete leaderboard.json file**
+
+---
 ---
 
 ## 📖 Project Background
@@ -46,3 +67,13 @@ Compute optimal paths by calculating combinations based on game rules and positi
 These bots utilize pattern recognition by extracting features from the current board (such as hand sizes, unplayed suit distributions, and player vulnerabilities) and choosing the move that scores the highest winning probability based on their training data:
 * **Random Forest Bot**: Utilizes an ensemble of independent decision trees to vote on the most tactically sound move given the immediate arrangement of cards.
 * **XGBoost Bot**: Employs a sequentially optimized, gradient-boosted decision tree framework that corrects predictive errors to mimic master-level execution speeds in milliseconds.
+
+---
+
+## Contributions of Team Personnel
+
+1. Felicia Gracia Aliwinoto - mastermind in creating GUI assets ( domino tile assets) and game poster
+2. Valesca Syakilla Tuhumury - created and implemented the DFS (Depth-First Search) search model
+3. Sherly Laurencia Matius - created and implemented the XGBoost (Extreme Gradient Boosting) ensemble machine learning model
+4. Juan Davin Setiawan - assisted in creating GUI concept and implementing GUI in python
+5. Louis Filiepe Tio Jansel - assisted in creating GUI and created search/machine learning models (Random Forest, Breadth-First Search/BFS and A-Star) 
