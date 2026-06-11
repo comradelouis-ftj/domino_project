@@ -198,7 +198,7 @@ class TextInput:
 #  via a z-order flag; call draw_overlay() last
 # ─────────────────────────────────────────────
 class Dropdown:
-    def __init__(self, rect, options, font):
+    def __init__(self, rect, options, font, bd=COPPER):
         self.rect    = pygame.Rect(rect)
         self.options = options
         self.font    = font
@@ -206,6 +206,7 @@ class Dropdown:
         self.open    = False
         self.hi      = -1
         self.enabled = True
+        self.bd      = bd   # outline colour (change per-instance)
 
     @property
     def selected(self): return self.options[self.idx]
@@ -214,13 +215,13 @@ class Dropdown:
         """Draw only the collapsed header bar (never the open list here)."""
         bg = DIS_BG if not self.enabled else PANEL
         fg = DIS_FG if not self.enabled else CYAN
-        bd = (60, 40, 80) if not self.enabled else COPPER
+        bd = (60, 40, 80) if not self.enabled else self.bd
         rrect(surf, bg, self.rect, 8, bd, 2)
         s = self.font.render(self.selected, True, fg)
         surf.blit(s, s.get_rect(midleft=(self.rect.x + 10, self.rect.centery)))
         if self.enabled:
             ax, ay = self.rect.right - 18, self.rect.centery
-            arrow_color = NEON_PINK if self.open else COPPER
+            arrow_color = NEON_PINK if self.open else self.bd
             pygame.draw.polygon(surf, arrow_color,
                 [(ax - 6, ay - 4), (ax + 6, ay - 4), (ax, ay + 5)])
 
@@ -747,7 +748,7 @@ class DominoGame:
         gap = 8
 
         self.gm_dd = Dropdown(
-            (bx, PY + 82, bw, 38), BOT_OPTIONS, self.fn_tiny)
+            (bx, PY + 82, bw, 38), BOT_OPTIONS, self.fn_tiny, bd=CYAN)
 
         def btn(label, fg=CYAN, bg=PANEL, bd=COPPER):
             nonlocal y
@@ -756,11 +757,17 @@ class DominoGame:
             y += bh + gap
             return b
 
-        self.gm_start  = btn("Start Game",  fg=GOLD,     bd=GOLD)
-        self.gm_pause  = btn("Pause Game",  fg=CYAN,     bd=CYAN)
+        # ── Sidebar button colors (outline only; text/hover colors match) ──────
+        # logout     → RED outline
+        # leaderboard→ COPPER (orange) outline
+        # pause      → GOLD (yellow) outline
+        # start game → NEON_GREEN outline
+        # dropdown   → CYAN (blue) outline  (set via gm_dd.bd below)
+        self.gm_start  = btn("Start Game",  fg=NEON_GREEN, bd=NEON_GREEN)
+        self.gm_pause  = btn("Pause Game",  fg=GOLD,       bd=GOLD)
         y += 4
-        self.gm_lb     = btn("Leaderboard", fg=NEON_GREEN, bd=NEON_GREEN)
-        self.gm_logout = btn("Log Out",     fg=RED,      bd=RED)
+        self.gm_lb     = btn("Leaderboard", fg=COPPER,     bd=COPPER)
+        self.gm_logout = btn("Log Out",     fg=RED,        bd=RED)
 
         # Board area
         BX = PX + PW + 10
@@ -1294,12 +1301,15 @@ class DominoGame:
             if (tile in valid_set and self.player_turn
                     and self.game_active and not self.is_paused):
                 pulse = int(128 + 100 * math.sin(pygame.time.get_ticks() / 280.0))
-                gsurf = pygame.Surface((self.TILE_H + 12, self.TILE_W + 12),
+                # -------------------------------
+                # Outline thickness
+                PAD = 2.5
+                gsurf = pygame.Surface((self.TILE_H + PAD * 2, self.TILE_W + PAD * 2),
                                        pygame.SRCALPHA)
                 pygame.draw.rect(gsurf, (0, 230, 255, pulse),
-                                 (0, 0, self.TILE_H + 12, self.TILE_W + 12),
-                                 border_radius=7)
-                self.screen.blit(gsurf, (tx - 6, ty - 6))
+                                 (0, 0, self.TILE_H + PAD * 2, self.TILE_W + PAD * 2),
+                                 border_radius=5)
+                self.screen.blit(gsurf, (tx - PAD, ty - PAD))
 
             if (self.drag_item_idx is not None and self.drag_item_idx == i):
                 rect = pygame.Rect(tx, ty, self.TILE_H, self.TILE_W)
