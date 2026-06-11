@@ -613,10 +613,34 @@ class DominoGame:
         self.fn_tiny  = f(13)
         self.fn_btn   = f(17, True)
         self.fn_timer = f(22, True)
-        # Board-specific larger bold fonts (fix 4)
-        self.fn_board_notif = f(18, True)
-        self.fn_board_info  = f(20, True)
-        self.fn_board_sub   = f(16, True)
+        # ── Board notification text ────────────────────────────────────────────
+        # Displayed at the very top of the board area.
+        # Shows the bot's last action, e.g. "Breadth-First Search played [1|5]."
+        # Color is set dynamically via set_board_notif(); default is WHITE.
+        # To change size: edit the number below (currently 21).
+        # To change color: pass a different color to set_board_notif() at each call site.
+        self.fn_board_notif = f(21, True)
+
+        # ── Bot info text (name + tile count) ─────────────────────────────────
+        # Displayed below the notification, e.g. "Breadth-First Search  |  6 tiles".
+        # Color is hard-coded to GOLD in _draw_board(); change it there to adjust.
+        # To change size: edit the number below (currently 23).
+        # To change color: find txt_c(..., GOLD, ...) for fn_board_info in _draw_board().
+        self.fn_board_info  = f(23, True)
+
+        # ── Boneyard count text ────────────────────────────────────────────────
+        # Displayed below the bot info, e.g. "Boneyard: 14 tiles".
+        # Color is hard-coded to TEXT (lavender-white) in _draw_board().
+        # To change size: edit the number below (currently 19).
+        # To change color: find txt_c(..., TEXT, ...) for fn_board_sub in _draw_board().
+        self.fn_board_sub   = f(19, True)
+
+        # ── "YOUR HAND" label text ─────────────────────────────────────────────
+        # Displayed at the bottom of the board, beneath the player's tiles.
+        # Color is hard-coded to GOLD in _draw_board().
+        # To change size: edit the number below (currently 20).
+        # To change color: find txt_c(..., GOLD, ...) for fn_your_hand in _draw_board().
+        self.fn_your_hand   = f(20, True)
 
     # ── tile assets ────────────────────────────
     def _load_assets(self):
@@ -723,7 +747,7 @@ class DominoGame:
 
     def _build_game(self):
         W, H = self.W, self.H
-        PW   = 215
+        PW   = 250
         PX   = 14
         PY   = 14
         PH   = H - 28
@@ -879,7 +903,7 @@ class DominoGame:
             self.consecutive_passes = 0
             msg = f"{self.bot.name} played [{move[0][0]}|{move[0][1]}]."
             self.set_status(msg, CYAN)
-            self.set_board_notif(msg, NEON_PINK)
+            self.set_board_notif(msg, WHITE)
         else:
             if self.engine.boneyard:
                 self.engine.draw_tile(self.engine.bot_hand)
@@ -957,12 +981,12 @@ class DominoGame:
             self.pending_modal = (
                 "YOU WIN!",
                 [f"You beat {bot_model}", f"Time: {tstr}  |  Reason: {reason}"],
-                ["Play Again", "Main Menu"], GOLD)
+                ["Play Again", "Back to Board"], GOLD)
         else:
             self.pending_modal = (
                 "GAME OVER",
                 [f"{bot_model} wins this round.", f"Time: {tstr}  |  Reason: {reason}"],
-                ["Play Again", "Main Menu"], RED)
+                ["Play Again", "Back to Board"], RED)
 
         self._update_btns()
 
@@ -1146,16 +1170,26 @@ class DominoGame:
                   self.fn_large, GOLD, cx, cy)
             return
 
-        # ── Board notification (above bot info) ──
+        # ── Board notification text ───────────────────────────────────────────
+        # Top line on the board. Font size & bold: fn_board_notif (set in _fonts).
+        # Color: changes dynamically — see set_board_notif() calls across the file.
         if self.board_notif_msg:
             txt_c(self.screen, self.board_notif_msg,
                   self.fn_board_notif, self.board_notif_color, cx, r.y + 18)
 
-        # Bot info (below notification)
+        # ── Bot name + tile count text ────────────────────────────────────────
+        # Second line on the board, e.g. "Breadth-First Search  |  6 tiles".
+        # Font size & bold: fn_board_info (set in _fonts).
+        # Color: GOLD — change the color constant here to adjust.
         bot_name = self.bot.name if self.bot else "Bot"
         txt_c(self.screen,
               f"{bot_name}  |  {len(self.engine.bot_hand)} tiles",
               self.fn_board_info, GOLD, cx, r.y + 42)
+
+        # ── Boneyard count text ───────────────────────────────────────────────
+        # Third line on the board, e.g. "Boneyard: 14 tiles".
+        # Font size & bold: fn_board_sub (set in _fonts).
+        # Color: TEXT (lavender-white) — change the color constant here to adjust.
         txt_c(self.screen,
               f"Boneyard: {len(self.engine.boneyard)} tiles",
               self.fn_board_sub, TEXT, cx, r.y + 66)
@@ -1174,7 +1208,11 @@ class DominoGame:
         # Player hand
         self._draw_hand(r)
 
-        txt_c(self.screen, "YOUR HAND", self.fn_tiny, COPPER, cx, r.bottom - 20)
+        # ── "YOUR HAND" label text ────────────────────────────────────────────
+        # Displayed at the bottom of the board, beneath the player's tiles.
+        # Font size & bold: fn_your_hand (set in _fonts).
+        # Color: GOLD — change the color constant here to adjust.
+        txt_c(self.screen, "YOUR HAND", self.fn_your_hand, GOLD, cx, r.bottom - 20)
 
     def _draw_board_tiles(self, r):
         layout = []
@@ -1334,6 +1372,10 @@ class DominoGame:
     def _on_modal(self, result):
         if result == "Play Again":
             self.start_game()
+        elif result == "Back to Board":
+            # Stay on the game page — just close the modal and reset state
+            self._reset_game_state()
+            self.set_status("Place your bets and press Start Game to deal!", GOLD)
         elif result in ("Main Menu", "OK"):
             self._reset_game_state()
             self.page       = "login"
