@@ -1,0 +1,80 @@
+{
+    "BFS (Search)": {
+        "HighRoller": {
+            "wins": 7,
+            "fastest_time": 26
+        },
+        "Roller-Delayed": {
+            "wins": 1,
+            "fastest_time": 44
+        },
+        "newPlayer": {
+            "wins": 1,
+            "fastest_time": 78
+        }
+    },
+    "DFS (Search)": {
+        "HighRoller": {
+            "wins": 3,
+            "fastest_time": 30
+        },
+        "Roller-Delayed": {
+            "wins": 1,
+            "fastest_time": 72
+        },
+        "newPlayer": {
+            "wins": 0,
+            "fastest_time": Infinity
+        },
+        "Test": {
+            "wins": 0,
+            "fastest_time": Infinity
+        }
+    },
+    "A* (Search)": {
+        "HighRoller": {
+            "wins": 2,
+            "fastest_time": 39
+        },
+        "Roller-Delayed": {
+            "wins": 1,
+            "fastest_time": 35
+        },
+        "newPlayer": {
+            "wins": 0,
+            "fastest_time": Infinity
+        }
+    },
+    "Random Forest (Ensemble)": {
+        "HighRoller": {
+            "wins": 2,
+            "fastest_time": 89
+        },
+        "newPlayer": {
+            "wins": 0,
+            "fastest_time": Infinity
+        }
+    },
+    "XGBoost (Ensemble)": {
+        "HighRoller": {
+            "wins": 2,
+            "fastest_time": 68
+        },
+        "Roller-Delayed": {
+            "wins": 3,
+            "fastest_time": 28
+        },
+        "newPlayer": {
+            "wins": 1,
+            "fastest_time": 94
+        },
+        "Trial": {
+            "wins": 1,
+            "fastest_time": 60.73300000000013
+        },
+        "Test": {
+            "wins": 0,
+            "fastest_time": Infinity
+        }
+    }
+}
