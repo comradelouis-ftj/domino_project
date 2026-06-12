@@ -16,7 +16,7 @@ By:
 Steps to run the GUI:
 1. (Optional, but preferred) Create a virtual environment by -> python -m venv venv
 2. Install all dependencies (via -> pip install -r requirements.txt). **Note: Make sure ipykernel is also installed, as this library may have to be installed separately**
-3. Run the .ipynb files within the 'modelling_ml' folder to train and save machine learning models.
+3. Run the .ipynb files within the 'modelling_ml' folder (both Domino_Modelling_RF.ipynb and modelling_xgb.ipynb) to train and save machine learning models.
 4. Verify that models are saved in the 'models' folder.
 5. Run gui_code.py to run and play the GUI.
 
@@ -72,8 +72,8 @@ These bots utilize pattern recognition by extracting features from the current b
 
 ## Contributions of Team Personnel
 
-1. Felicia Gracia Aliwinoto - mastermind in creating GUI assets ( domino tile assets) and game poster
+1. Felicia Gracia Aliwinoto - mastermind in creating GUI assets ( domino tile assets) and game poster, as well as advising in GUI UI
 2. Valesca Syakilla Tuhumury - created and implemented the DFS (Depth-First Search) search model
 3. Sherly Laurencia Matius - created and implemented the XGBoost (Extreme Gradient Boosting) ensemble machine learning model
-4. Juan Davin Setiawan - assisted in creating GUI concept and implementing GUI in python
+4. Juan Davin Setiawan - assisted in creating GUI concept and implementing GUI UI/UX in python
 5. Louis Filiepe Tio Jansel - assisted in creating GUI and created search/machine learning models (Random Forest, Breadth-First Search/BFS and A-Star) 
